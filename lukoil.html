@@ -273,6 +273,7 @@
     <div style="display:flex;gap:24px">
       <a href="index.html" style="font-size:12px;color:#888;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase">Overview</a>
       <a href="lukoil.html" style="font-size:12px;color:#fff;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase">Lukoil</a>
+      <a href="severstal.html" style="font-size:12px;color:#888;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase">Severstal</a>
     </div>
   </div>
 </nav>
@@ -461,6 +462,10 @@
           </div>
           <div class="legend">
             <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Reported</div>
+            <div class="legend-item">
+              <svg width="18" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="18" y2="5" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,3"/></svg>
+              1.5°C Pathway
+            </div>
           </div>
         </div>
         <div class="chart-wrap" style="height:230px"><canvas id="s12Chart"></canvas></div>
@@ -474,6 +479,10 @@
           </div>
           <div class="legend">
             <div class="legend-item"><div class="legend-dot" style="background:#6b7280"></div>Reported</div>
+            <div class="legend-item">
+              <svg width="18" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="18" y2="5" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,3"/></svg>
+              1.5°C Pathway
+            </div>
           </div>
         </div>
         <div class="chart-wrap" style="height:230px"><canvas id="s3Chart"></canvas></div>
@@ -694,20 +703,26 @@ function trendOptions(color, yLabel) {
 // Scope 1+2 chart
 const s12Grad = document.getElementById('s12Chart').getContext('2d').createLinearGradient(0,0,0,220);
 s12Grad.addColorStop(0, 'rgba(192,57,43,0.18)');
+// S1+2 pathway factors from sheet col M (indexed to 2019)
+const s12PathwayFactors = [1, 0.9907, 0.9814, 0.9721, 0.8992, 0.8263];
+const s12Pathway = s12PathwayFactors.map(f => +(s12[0] * f / 1e6).toFixed(2));
+
+// S3 pathway factors from sheet col N (indexed to 2019)
+const s3PathwayFactors = [1, 0.9716, 0.9432, 0.9148, 0.8864, 0.8581];
+const s3Pathway = s3PathwayFactors.map(f => +(s3[0] * f / 1e6).toFixed(2));
+
+// Scope 1+2 chart
+const s12Grad = document.getElementById('s12Chart').getContext('2d').createLinearGradient(0,0,0,220);
+s12Grad.addColorStop(0, 'rgba(192,57,43,0.18)');
 s12Grad.addColorStop(1, 'rgba(192,57,43,0.02)');
 new Chart(document.getElementById('s12Chart'), {
   type: 'line',
   data: {
     labels: years,
-    datasets: [{
-      label: 'Scope 1+2',
-      data: s12.map(v => v/1e6),
-      borderColor: '#c0392b',
-      backgroundColor: s12Grad,
-      borderWidth: 2.5,
-      pointRadius: 5, pointBackgroundColor: '#c0392b',
-      tension: 0.3, fill: true
-    }]
+    datasets: [
+      { label: 'Reported S1+2', data: s12.map(v => v/1e6), borderColor: '#c0392b', backgroundColor: s12Grad, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#c0392b', tension: 0.3, fill: true },
+      { label: '1.5°C Pathway', data: s12Pathway, borderColor: '#2563eb', backgroundColor: 'transparent', borderWidth: 2, borderDash: [5,3], pointRadius: 0, tension: 0.3, fill: false }
+    ]
   },
   options: { ...trendOptions('#c0392b', 'Mt CO₂e'), scales: { ...trendOptions('#c0392b','Mt CO₂e').scales, y: { ...trendOptions('#c0392b','Mt CO₂e').scales.y, min: 35, max: 52 } } }
 });
@@ -720,15 +735,10 @@ new Chart(document.getElementById('s3Chart'), {
   type: 'line',
   data: {
     labels: years,
-    datasets: [{
-      label: 'Scope 3',
-      data: s3.map(v => v/1e6),
-      borderColor: '#6b7280',
-      backgroundColor: s3Grad,
-      borderWidth: 2.5,
-      pointRadius: 5, pointBackgroundColor: '#6b7280',
-      tension: 0.3, fill: true
-    }]
+    datasets: [
+      { label: 'Reported S3', data: s3.map(v => v/1e6), borderColor: '#6b7280', backgroundColor: s3Grad, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#6b7280', tension: 0.3, fill: true },
+      { label: '1.5°C Pathway', data: s3Pathway, borderColor: '#2563eb', backgroundColor: 'transparent', borderWidth: 2, borderDash: [5,3], pointRadius: 0, tension: 0.3, fill: false }
+    ]
   },
   options: { ...trendOptions('#6b7280', 'Mt CO₂e'), scales: { ...trendOptions('#6b7280','Mt CO₂e').scales, y: { ...trendOptions('#6b7280','Mt CO₂e').scales.y, min: 290, max: 380 } } }
 });
