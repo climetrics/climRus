@@ -700,9 +700,6 @@ function trendOptions(color, yLabel) {
   };
 }
 
-// Scope 1+2 chart
-const s12Grad = document.getElementById('s12Chart').getContext('2d').createLinearGradient(0,0,0,220);
-s12Grad.addColorStop(0, 'rgba(192,57,43,0.18)');
 // S1+2 pathway factors from sheet col M (indexed to 2019)
 const s12PathwayFactors = [1, 0.9907, 0.9814, 0.9721, 0.8992, 0.8263];
 const s12Pathway = s12PathwayFactors.map(f => +(s12[0] * f / 1e6).toFixed(2));
@@ -712,15 +709,15 @@ const s3PathwayFactors = [1, 0.9716, 0.9432, 0.9148, 0.8864, 0.8581];
 const s3Pathway = s3PathwayFactors.map(f => +(s3[0] * f / 1e6).toFixed(2));
 
 // Scope 1+2 chart
-const s12Grad = document.getElementById('s12Chart').getContext('2d').createLinearGradient(0,0,0,220);
-s12Grad.addColorStop(0, 'rgba(192,57,43,0.18)');
-s12Grad.addColorStop(1, 'rgba(192,57,43,0.02)');
+const trendS12Grad = document.getElementById('s12Chart').getContext('2d').createLinearGradient(0,0,0,220);
+trendS12Grad.addColorStop(0, 'rgba(192,57,43,0.18)');
+trendS12Grad.addColorStop(1, 'rgba(192,57,43,0.02)');
 new Chart(document.getElementById('s12Chart'), {
   type: 'line',
   data: {
     labels: years,
     datasets: [
-      { label: 'Reported S1+2', data: s12.map(v => v/1e6), borderColor: '#c0392b', backgroundColor: s12Grad, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#c0392b', tension: 0.3, fill: true },
+      { label: 'Reported S1+2', data: s12.map(v => v/1e6), borderColor: '#c0392b', backgroundColor: trendS12Grad, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#c0392b', tension: 0.3, fill: true },
       { label: '1.5°C Pathway', data: s12Pathway, borderColor: '#2563eb', backgroundColor: 'transparent', borderWidth: 2, borderDash: [5,3], pointRadius: 0, tension: 0.3, fill: false }
     ]
   },
@@ -728,15 +725,15 @@ new Chart(document.getElementById('s12Chart'), {
 });
 
 // Scope 3 chart
-const s3Grad = document.getElementById('s3Chart').getContext('2d').createLinearGradient(0,0,0,220);
-s3Grad.addColorStop(0, 'rgba(107,114,128,0.18)');
-s3Grad.addColorStop(1, 'rgba(107,114,128,0.02)');
+const trendS3Grad = document.getElementById('s3Chart').getContext('2d').createLinearGradient(0,0,0,220);
+trendS3Grad.addColorStop(0, 'rgba(107,114,128,0.18)');
+trendS3Grad.addColorStop(1, 'rgba(107,114,128,0.02)');
 new Chart(document.getElementById('s3Chart'), {
   type: 'line',
   data: {
     labels: years,
     datasets: [
-      { label: 'Reported S3', data: s3.map(v => v/1e6), borderColor: '#6b7280', backgroundColor: s3Grad, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#6b7280', tension: 0.3, fill: true },
+      { label: 'Reported S3', data: s3.map(v => v/1e6), borderColor: '#6b7280', backgroundColor: trendS3Grad, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#6b7280', tension: 0.3, fill: true },
       { label: '1.5°C Pathway', data: s3Pathway, borderColor: '#2563eb', backgroundColor: 'transparent', borderWidth: 2, borderDash: [5,3], pointRadius: 0, tension: 0.3, fill: false }
     ]
   },
