@@ -1,583 +1,730 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Climetrics — Corporate Sustainability &amp; Climate Impact</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      color: #1a1a1a;
-      background: #fff;
-    }
-
-    /* ── NAV ── */
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 48px;
-      border-bottom: 0.5px solid #B5D4F4;
-      background: #042C53;
-    }
-    .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 42px;
-      color: #fff;
-      letter-spacing: -0.3px;
-      text-decoration: none;
-    }
-    .nav-logo em { font-style: italic; color: #85B7EB; }
-    .nav-links { display: flex; gap: 28px; }
-    .nav-links a {
-      font-size: 12px;
-      font-weight: 500;
-      color: #85B7EB;
-      text-decoration: none;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      transition: color 0.15s;
-    }
-    .nav-links a:hover { color: #fff; }
-
-    /* ── HERO ── */
-    .hero {
-      background: #042C53;
-      padding: 72px 48px 64px;
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 48px;
-      align-items: end;
-    }
-    .hero-eyebrow {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #85B7EB;
-      margin-bottom: 20px;
-    }
-    .hero-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 22px;
-      color: #fff;
-      line-height: 1.05;
-      margin-bottom: 24px;
-    }
-    .hero-name em {
-      font-style: italic;
-      color: #85B7EB;
-      display: block;
-    }
-    .hero-bio {
-      font-size: 16px;
-      line-height: 1.75;
-      color: #B5D4F4;
-      font-weight: 300;
-      max-width: 520px;
-      margin-bottom: 32px;
-    }
-    .hero-cta {
-      display: inline-block;
-      padding: 11px 26px;
-      border: 1px solid #378ADD;
-      color: #E6F1FB;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .hero-cta:hover { background: #185FA5; }
-
-    /* ── HERO STATS ── */
-    .hero-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      border: 0.5px solid #185FA5;
-      align-self: center;
-    }
-    .stat-item {
-      padding: 20px 22px;
-      border-bottom: 0.5px solid #185FA5;
-    }
-    .stat-item:last-child { border-bottom: none; }
-    .stat-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 32px;
-      color: #fff;
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 10.5px;
-      color: #85B7EB;
-      font-weight: 500;
-      letter-spacing: 0.8px;
-      margin-top: 5px;
-    }
-
-    /* ── SECTION ── */
-    .section {
-      padding: 56px 48px;
-      border-bottom: 0.5px solid #B5D4F4;
-    }
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      margin-bottom: 12px;
-    }
-    .section-label {
-      font-size: 10px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #185FA5;
-      white-space: nowrap;
-    }
-    .section-rule { flex: 1; height: 0.5px; background: #B5D4F4; }
-    .section-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 32px;
-      color: #1a1a1a;
-      line-height: 1.2;
-      margin-bottom: 12px;
-    }
-    .section-sub {
-      font-size: 15px;
-      color: #555;
-      line-height: 1.65;
-      font-weight: 300;
-      max-width: 600px;
-    }
-
-    /* ── PROJECT GRID ── */
-    .project-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: #B5D4F4;
-      border: 0.5px solid #B5D4F4;
-      margin-top: 36px;
-    }
-    .project-card {
-      background: #fff;
-      padding: 28px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .project-card:hover { background: #E6F1FB; }
-    .project-card.featured {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
-    .project-tag {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border: 0.5px solid #378ADD;
-      color: #185FA5;
-      margin-bottom: 14px;
-    }
-    .project-tag.reporting { border-color: #1D9E75; color: #0F6E56; }
-    .project-tag.modeling  { border-color: #185FA5; color: #0C447C; }
-    .project-tag.data      { border-color: #534AB7; color: #3C3489; }
-    .project-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 21px;
-      line-height: 1.25;
-      color: #1a1a1a;
-      margin-bottom: 12px;
-    }
-    .project-desc {
-      font-size: 13.5px;
-      line-height: 1.65;
-      color: #555;
-      font-weight: 300;
-    }
-    .project-meta {
-      margin-top: 20px;
-      padding-top: 14px;
-      border-top: 0.5px solid #B5D4F4;
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-    .project-year { font-size: 11px; color: #999; font-weight: 500; }
-    .project-link { font-size: 11px; color: #185FA5; font-weight: 500; letter-spacing: 0.5px; text-decoration: none; }
-    .project-link:hover { text-decoration: underline; }
-
-    /* ── FEATURED VISUAL ── */
-    .feat-visual {
-      background: #042C53;
-      display: flex;
-      align-items: flex-end;
-      padding: 24px;
-      min-height: 200px;
-    }
-    .feat-bars {
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      width: 100%;
-      height: 140px;
-    }
-    .feat-bar-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-      height: 100%;
-      justify-content: flex-end;
-    }
-    .feat-bar-label-top {
-      font-size: 8.5px;
-      color: #85B7EB;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-    .feat-bar { width: 100%; }
-    .feat-bar-label-bot {
-      font-size: 8px;
-      color: #85B7EB;
-      margin-top: 5px;
-    }
-    .feat-note {
-      font-size: 9.5px;
-      color: #85B7EB;
-      margin-top: 12px;
-      font-style: italic;
-      letter-spacing: 0.3px;
-    }
-
-    /* ── SKILLS ── */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 36px;
-    }
-    .skill-item {
-      padding: 22px 24px;
-      border: 0.5px solid #B5D4F4;
-      background: #E6F1FB;
-    }
-    .skill-icon {
-      width: 30px;
-      height: 30px;
-      border: 1.5px solid #378ADD;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .skill-icon svg {
-      width: 14px;
-      height: 14px;
-      stroke: #185FA5;
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .skill-name { font-size: 13.5px; font-weight: 500; color: #042C53; margin-bottom: 6px; }
-    .skill-desc { font-size: 12px; color: #185FA5; line-height: 1.55; }
-
-    /* ── CONTACT ── */
-    .contact-band {
-      background: #042C53;
-      padding: 56px 48px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 40px;
-      align-items: center;
-    }
-    .contact-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 30px;
-      color: #fff;
-      margin-bottom: 10px;
-      line-height: 1.2;
-    }
-    .contact-title em { font-style: italic; color: #85B7EB; }
-    .contact-sub { font-size: 14px; color: #B5D4F4; font-weight: 300; line-height: 1.6; max-width: 460px; }
-    .contact-links { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
-    .contact-link {
-      font-size: 13px;
-      color: #85B7EB;
-      text-decoration: none;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      transition: color 0.15s;
-    }
-    .contact-link:hover { color: #fff; }
-
-    /* ── FOOTER ── */
-    .footer {
-      background: #031f3d;
-      padding: 20px 48px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .footer-copy { font-size: 11px; color: #378ADD; letter-spacing: 0.3px; }
-    .footer-back { font-size: 11px; color: #378ADD; text-decoration: none; }
-    .footer-back:hover { color: #85B7EB; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav { padding: 14px 20px; }
-      .nav-links { gap: 16px; }
-      .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 32px; }
-      .hero-name { font-size: 36px; }
-      .hero-stats { flex-direction: row; }
-      .stat-item { border-bottom: none; border-right: 0.5px solid #185FA5; }
-      .stat-item:last-child { border-right: none; }
-      .section { padding: 40px 20px; }
-      .project-grid { grid-template-columns: 1fr; }
-      .project-card.featured { grid-template-columns: 1fr; }
-      .feat-visual { display: none; }
-      .skills-grid { grid-template-columns: 1fr 1fr; }
-      .contact-band { grid-template-columns: 1fr; padding: 40px 20px; }
-      .contact-links { align-items: flex-start; }
-      .footer { padding: 16px 20px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Climate Corporate Landscape of Russian Majors</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-muted: #888;
+    --bg: #f5f3ef;
+    --bg-card: #ffffff;
+    --rule: #d8d4cc;
+    --rule-light: #ece9e3;
+    --accent: #c0392b;
+    --amber: #d97706;
+    --green: #2d6a4f;
+    --green-light: #d1ece0;
+    --pathway: #2563eb;
+    --teal: #0f766e;
+    --teal-light: #ccfbf1;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+ 
+  /* NAV */
+  nav {
+    background: var(--ink);
+    border-bottom: 3px solid var(--accent);
+    padding: 0 32px;
+  }
+  .nav-inner {
+    max-width: 1040px; margin: 0 auto;
+    display: flex; align-items: center;
+    justify-content: space-between; height: 52px;
+  }
+  .nav-brand {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #ccc; text-decoration: none;
+  }
+  .nav-brand span { color: var(--accent); }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a {
+    font-size: 12px; color: #888;
+    text-decoration: none; letter-spacing: 0.06em;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a.active { color: #fff; }
+ 
+  /* HERO */
+  header {
+    background: var(--ink);
+    padding: 56px 0 48px;
+  }
+  .header-inner {
+    max-width: 1040px; margin: 0 auto; padding: 0 32px;
+  }
+  .header-kicker {
+    font-size: 11px; font-weight: 300;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #777; margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: 700; line-height: 1.15;
+    letter-spacing: -0.5px; color: #fff;
+    max-width: 640px; margin-bottom: 18px;
+  }
+  .header-desc {
+    font-size: 14px; color: #888;
+    max-width: 560px; line-height: 1.7;
+  }
+  .page-rule {
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--amber) 40%, var(--pathway) 75%, var(--teal) 100%);
+  }
+ 
+  /* LAYOUT */
+  main {
+    max-width: 1040px; margin: 0 auto;
+    padding: 48px 32px 80px; display: grid; gap: 40px;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 16px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--rule);
+  }
+ 
+  /* KPI ROW */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 800px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 520px) { .kpi-row { grid-template-columns: 1fr 1fr; } }
+ 
+  .kpi-tile {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 4px; padding: 18px 20px;
+  }
+  .kpi-tile-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 8px;
+  }
+  .kpi-tile-value {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 22px; font-weight: 700;
+    line-height: 1; color: var(--ink);
+  }
+  .kpi-tile-value.accent { color: var(--accent); }
+  .kpi-tile-value.teal   { color: var(--teal); }
+  .kpi-tile-value.amber  { color: var(--amber); }
+  .kpi-tile-value.blue   { color: var(--pathway); }
+  .kpi-tile-sub {
+    font-size: 11px; color: var(--ink-muted); margin-top: 4px;
+  }
+ 
+  /* CHART ROW */
+  .chart-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  @media (max-width: 700px) { .chart-pair { grid-template-columns: 1fr; } }
+ 
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 4px; padding: 24px 28px;
+  }
+  .card-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px; font-weight: 700; margin-bottom: 4px;
+  }
+  .card-sub { font-size: 12px; color: var(--ink-muted); margin-bottom: 18px; }
+  .chart-wrap { position: relative; height: 260px; }
+ 
+  /* COMPANY TABLE */
+  .sector-group { margin-bottom: 28px; }
+  .sector-heading {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 10px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--rule);
+  }
+  .company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .company-card {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 3px; padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+    position: relative;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .company-card:hover {
+    border-color: var(--ink-soft);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  .company-card.has-report {
+    border-left: 3px solid var(--teal);
+  }
+  .company-card.forthcoming {
+    border-left: 3px solid var(--rule);
+  }
+  .company-name {
+    font-weight: 500; font-size: 14px; color: var(--ink);
+  }
+  .company-meta {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .tag {
+    display: inline-block; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 2px;
+  }
+  .tag-public     { background: var(--green-light); color: var(--green); }
+  .tag-private    { background: #f3f4f6; color: #4b5563; }
+  .tag-government { background: var(--pathway-light, #dbeafe); color: var(--pathway); }
+  .tag-report     { background: var(--teal-light); color: var(--teal); }
+  .tag-forthcoming{ background: #fef3c7; color: #92400e; }
+ 
+  .company-link {
+    font-size: 11px; color: var(--teal);
+    text-decoration: none; display: inline-flex;
+    align-items: center; gap: 4px; margin-top: 2px;
+  }
+  .company-link:hover { text-decoration: underline; }
+ 
+  .forthcoming-note {
+    font-size: 11px; color: var(--ink-muted); font-style: italic;
+  }
+ 
+  /* FOOTER */
+  footer {
+    max-width: 1040px; margin: 0 auto;
+    padding: 20px 32px 48px;
+    font-size: 11.5px; color: var(--ink-muted);
+    border-top: 1px solid var(--rule); line-height: 1.7;
+  }
+ 
+  /* ── COLLAPSIBLE ── */
+  .collapsible-header {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none;
+    padding-bottom: 8px; border-bottom: 1px solid var(--rule);
+    margin-bottom: 0;
+  }
+  .collapsible-header:hover .section-label-text { color: var(--ink); }
+  .collapsible-header .section-label-text {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-muted);
+    transition: color 0.15s;
+  }
+  .collapsible-toggle {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; color: var(--ink-muted);
+    transition: color 0.15s;
+  }
+  .collapsible-header:hover .collapsible-toggle { color: var(--ink-soft); }
+  .toggle-icon {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--rule-light); border: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; line-height: 1;
+    transition: transform 0.25s ease, background 0.15s;
+    flex-shrink: 0;
+  }
+  .collapsible-header.open .toggle-icon { transform: rotate(180deg); background: var(--ink); color: #fff; }
+ 
+  .collapsible-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+    opacity: 0;
+    margin-top: 0;
+  }
+  .collapsible-body.open {
+    max-height: 2000px;
+    opacity: 1;
+    margin-top: 16px;
+  }
+</style>
 </head>
 <body>
-
-  <!-- NAVIGATION -->
-  <nav class="nav">
-    <a class="nav-logo" href="#">Climetrics<em>.</em></a>
+ 
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Russian <span>Climate</span> Landscape</a>
     <div class="nav-links">
-      <a href="#projects">Projects</a>
-      <a href="#methods">Methods</a>
-      <a href="#contact">Contact</a>
+      <a href="index.html" class="active">Overview</a>
+      <a href="lukoil.html">Lukoil</a>
     </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div>
-      <div class="hero-eyebrow">Corporate sustainability &amp; climate impact</div>
-      <h1 class="hero-name">
-        Measuring what<br>
-        <em>the planet needs</em><br>
-        companies to know.
-      </h1>
-      <p class="hero-bio">
-        Independent research and analysis at the intersection of corporate finance, climate science, and sustainability strategy. From emissions accounting to physical risk modelling, I help organisations understand what decarbonisation actually means for their numbers.
-      </p>
-      <a class="hero-cta" href="#projects">View projects</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">24+</div>
-        <div class="stat-label">Projects completed</div>
+  </div>
+</nav>
+ 
+<header>
+  <div class="header-inner">
+    <div class="header-kicker">Research · Corporate Climate Analysis</div>
+    <h1>Climate Corporate Landscape of Russian Majors</h1>
+    <p class="header-desc">
+      An analysis of the emissions, economic footprint, and climate commitments of Russia's largest publicly active corporations. Data as of 2024.
+    </p>
+  </div>
+</header>
+<div class="page-rule"></div>
+ 
+<main>
+ 
+  <!-- KPIs -->
+  <section>
+    <div class="section-label">01 — Aggregate Footprint (2024)</div>
+    <div class="kpi-row">
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">Total S1+2 Emissions</div>
+        <div class="kpi-tile-value accent">615 Mt</div>
+        <div class="kpi-tile-sub">CO₂e · 27 corporates</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">11</div>
-        <div class="stat-label">Sectors covered</div>
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">Share of Russian GHG</div>
+        <div class="kpi-tile-value accent">~24%</div>
+        <div class="kpi-tile-sub">of national territorial emissions</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">3.2M</div>
-        <div class="stat-label">tCO₂e analysed</div>
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">Share of Global GHG</div>
+        <div class="kpi-tile-value amber">~1.2%</div>
+        <div class="kpi-tile-sub">of global emissions (52.3 Gt base)</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">Combined Revenue</div>
+        <div class="kpi-tile-value blue">₽49.8 tn</div>
+        <div class="kpi-tile-sub">RUB · ~25% of GDP est.</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">Workers Employed</div>
+        <div class="kpi-tile-value teal">~3.5 M</div>
+        <div class="kpi-tile-sub">~3.7% of working-age population</div>
       </div>
     </div>
   </section>
-
-  <!-- PROJECTS -->
-  <section class="section" id="projects">
-    <div class="section-header">
-      <span class="section-label">Selected work</span>
-      <div class="section-rule"></div>
+ 
+  <!-- CHARTS — collapsible -->
+  <section>
+    <div class="collapsible-header" id="chartsToggle">
+      <span class="section-label-text">02 — Emissions &amp; Revenue by Sector</span>
+      <div class="collapsible-toggle">
+        <span class="toggle-label">Show charts</span>
+        <span class="toggle-icon">▾</span>
+      </div>
     </div>
-    <h2 class="section-title">Projects</h2>
-    <p class="section-sub">A cross-section of analysis, tools, and reports spanning Scope 3 disclosure, transition risk, and physical climate exposure.</p>
-
-    <div class="project-grid">
-
-      <!-- FEATURED PROJECT -->
-      <div class="project-card featured">
-        <div>
-          <span class="project-tag reporting">GHG reporting</span>
-          <h3 class="project-title">Scope 3 Category 15 — a practical accounting guide for European asset managers</h3>
-          <p class="project-desc">A full methodology walkthrough for calculating financed emissions under the GHG Protocol's investment category, including treatment of listed equity, corporate bonds, and sovereign debt under PCAF standards. Delivered as an interactive Excel model and written report for a €40bn asset manager.</p>
-          <div class="project-meta">
-            <span class="project-year">2024 · 6-month engagement</span>
-            <a class="project-link" href="#">Read case study →</a>
+    <div class="collapsible-body" id="chartsBody">
+      <div class="chart-pair">
+ 
+        <div class="card">
+          <div class="card-title">S1+2 Emissions by Sector</div>
+          <div class="card-sub">Thousands metric tons CO₂e · 2024 reported</div>
+          <div class="chart-wrap"><canvas id="emissionsChart"></canvas></div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-title">Revenue by Sector</div>
+          <div class="card-sub">Billion RUB · 2024</div>
+          <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+        </div>
+ 
+      </div>
+    </div>
+  </section>
+ 
+  <!-- COMPANIES — collapsible -->
+  <section>
+    <div class="collapsible-header open" id="companiesToggle">
+      <span class="section-label-text">03 — Companies by Sector</span>
+      <div class="collapsible-toggle">
+        <span class="toggle-label">Hide</span>
+        <span class="toggle-icon">▾</span>
+      </div>
+    </div>
+    <div class="collapsible-body open" id="companiesBody">
+ 
+    <!-- Oil & Gas -->
+    <div class="sector-group">
+      <div class="sector-heading">Oil &amp; Gas</div>
+      <div class="company-grid">
+ 
+        <a class="company-card has-report" href="lukoil.html">
+          <div class="company-name">Lukoil</div>
+          <div class="company-meta">
+            <span class="tag tag-public">Public</span>
+            <span class="tag tag-report">Climate report available</span>
           </div>
-        </div>
-        <div class="feat-visual">
-          <div style="width:100%;">
-            <div class="feat-bars">
-              <div class="feat-bar-wrap">
-                <div class="feat-bar-label-top">Cat.1</div>
-                <div class="feat-bar" style="height:45%; background:#378ADD;"></div>
-                <div class="feat-bar-label-bot">Purch.</div>
-              </div>
-              <div class="feat-bar-wrap">
-                <div class="feat-bar-label-top">Cat.4</div>
-                <div class="feat-bar" style="height:30%; background:#185FA5;"></div>
-                <div class="feat-bar-label-bot">Trans.</div>
-              </div>
-              <div class="feat-bar-wrap">
-                <div class="feat-bar-label-top">Cat.11</div>
-                <div class="feat-bar" style="height:70%; background:#0C447C;"></div>
-                <div class="feat-bar-label-bot">Use</div>
-              </div>
-              <div class="feat-bar-wrap">
-                <div class="feat-bar-label-top">Cat.12</div>
-                <div class="feat-bar" style="height:20%; background:#378ADD;"></div>
-                <div class="feat-bar-label-bot">EoL</div>
-              </div>
-              <div class="feat-bar-wrap">
-                <div class="feat-bar-label-top">Cat.15</div>
-                <div class="feat-bar" style="height:95%; background:#85B7EB;"></div>
-                <div class="feat-bar-label-bot">Invest.</div>
-              </div>
-            </div>
-            <p class="feat-note">Scope 3 emissions by category — illustrative</p>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 39.8 Mt · Revenue: ₽3,047 bn</div>
+          <div class="company-link" href="lukoil.html">View Climate Performance Overview →</div>
+        </a>
+ 
+        <div class="company-card forthcoming">
+          <div class="company-name">Gazprom</div>
+          <div class="company-meta">
+            <span class="tag tag-public">Public</span>
+            <span class="tag tag-forthcoming">Report forthcoming</span>
           </div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 233.6 Mt · Revenue: ₽10,715 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
         </div>
-      </div>
-
-      <!-- PROJECT 2 -->
-      <div class="project-card">
-        <span class="project-tag modeling">Climate modelling</span>
-        <h3 class="project-title">Physical risk heat stress: WBGT mapping for industrial supply chains in Southeast Asia</h3>
-        <p class="project-desc">Spatial analysis combining CMIP6 climate projections (SSP2-4.5 and SSP5-8.5) with supplier-site geodata to quantify labour productivity losses by 2035 and 2050 under two warming scenarios.</p>
-        <div class="project-meta">
-          <span class="project-year">2024</span>
-          <a class="project-link" href="#">View methodology →</a>
+ 
+        <div class="company-card forthcoming">
+          <div class="company-name">Rosneft</div>
+          <div class="company-meta">
+            <span class="tag tag-public">Public</span>
+            <span class="tag tag-forthcoming">Report forthcoming</span>
+          </div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 80.1 Mt · Revenue: ₽10,139 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
         </div>
-      </div>
-
-      <!-- PROJECT 3 -->
-      <div class="project-card">
-        <span class="project-tag data">Data &amp; tools</span>
-        <h3 class="project-title">Transition risk exposure dashboard for FTSE 350 companies</h3>
-        <p class="project-desc">An open-source Python tool that aggregates carbon price sensitivity, stranded asset exposure, and regulatory alignment scores from public disclosures, producing a single transition-readiness index.</p>
-        <div class="project-meta">
-          <span class="project-year">2023</span>
-          <a class="project-link" href="#">GitHub →</a>
+ 
+        <div class="company-card forthcoming">
+          <div class="company-name">Tatneft</div>
+          <div class="company-meta">
+            <span class="tag tag-public">Public</span>
+            <span class="tag tag-forthcoming">Report forthcoming</span>
+          </div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 13.4 Mt · Revenue: ₽2,030 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
         </div>
-      </div>
-
-      <!-- PROJECT 4 -->
-      <div class="project-card">
-        <span class="project-tag reporting">ESG disclosure</span>
-        <h3 class="project-title">CSRD double materiality assessment — methodology and sector benchmarks</h3>
-        <p class="project-desc">A replicable framework for conducting ESRS-aligned double materiality assessments, with worked examples across energy, retail, and financial services sectors.</p>
-        <div class="project-meta">
-          <span class="project-year">2023</span>
-          <a class="project-link" href="#">Download report →</a>
+ 
+        <div class="company-card forthcoming">
+          <div class="company-name">Novatek</div>
+          <div class="company-meta">
+            <span class="tag tag-public">Public</span>
+            <span class="tag tag-forthcoming">Report forthcoming</span>
+          </div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 9.8 Mt · Revenue: ₽1,546 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
         </div>
-      </div>
-
-      <!-- PROJECT 5 -->
-      <div class="project-card">
-        <span class="project-tag modeling">Scenario analysis</span>
-        <h3 class="project-title">Net-zero pathway modelling for a European steel manufacturer</h3>
-        <p class="project-desc">Bespoke decarbonisation roadmap covering DRI-EAF transition economics, green hydrogen cost curves, and carbon border adjustment mechanism exposure through 2045.</p>
-        <div class="project-meta">
-          <span class="project-year">2022</span>
-          <a class="project-link" href="#">Case study →</a>
+ 
+        <div class="company-card forthcoming">
+          <div class="company-name">Surgutneftegas</div>
+          <div class="company-meta">
+            <span class="tag tag-public">Public</span>
+            <span class="tag tag-forthcoming">Report forthcoming</span>
+          </div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">Emissions undisclosed · Revenue: ₽923 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
         </div>
+ 
       </div>
-
     </div>
+ 
+    <!-- Metals & Mining -->
+    <div class="sector-group">
+      <div class="sector-heading">Metals &amp; Mining</div>
+      <div class="company-grid">
+        <div class="company-card forthcoming">
+          <div class="company-name">NLMK</div>
+          <div class="company-meta"><span class="tag tag-private">Private</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 31.5 Mt · Revenue: ₽738 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Severstal</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 23.9 Mt · Revenue: ₽830 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Rusal</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 27.3 Mt · Revenue: ₽1,122 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Nornickel</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 8.6 Mt · Revenue: ₽1,163 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Polyus</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 2.1 Mt · Revenue: ₽7 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- Utilities -->
+    <div class="sector-group">
+      <div class="sector-heading">Utilities</div>
+      <div class="company-grid">
+        <div class="company-card forthcoming">
+          <div class="company-name">Inter RAO</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1: 78.1 Mt · Revenue: ₽1,548 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Rosseti</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1: 0.3 Mt · Revenue: ₽1,506 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Mosvodokanal</div>
+          <div class="company-meta"><span class="tag tag-government">Government</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">Emissions undisclosed · Revenue: ₽89 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- Passenger Transport -->
+    <div class="sector-group">
+      <div class="sector-heading">Passenger Transport</div>
+      <div class="company-grid">
+        <div class="company-card forthcoming">
+          <div class="company-name">Russian Railways</div>
+          <div class="company-meta"><span class="tag tag-government">Government</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 35.6 Mt · Revenue: ₽3,296 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Aeroflot</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 11.3 Mt · Revenue: ₽857 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- Food Retailers -->
+    <div class="sector-group">
+      <div class="sector-heading">Food Retailers</div>
+      <div class="company-grid">
+        <div class="company-card forthcoming">
+          <div class="company-name">X5 Retail Group</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 3.5 Mt · Revenue: ₽3,908 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Magnit</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 5.5 Mt · Revenue: ₽3,043 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- Telecommunications -->
+    <div class="sector-group">
+      <div class="sector-heading">Telecommunications</div>
+      <div class="company-grid">
+        <div class="company-card forthcoming">
+          <div class="company-name">MTS</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 85.2 Mt · Revenue: ₽704 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Rostelecom</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 1.6 Mt · Revenue: ₽708 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">MegaFon</div>
+          <div class="company-meta"><span class="tag tag-private">Private</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">Emissions undisclosed · Revenue: ₽486 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- IT -->
+    <div class="sector-group">
+      <div class="sector-heading">IT Software &amp; Services</div>
+      <div class="company-grid">
+        <div class="company-card forthcoming">
+          <div class="company-name">Yandex</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 0.3 Mt · Revenue: ₽798 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">VK</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 0.04 Mt · Revenue: ₽148 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- Remaining sectors -->
+    <div class="sector-group">
+      <div class="sector-heading">Chemicals · Construction &amp; Engineering · Food Production · Conglomerates</div>
+      <div class="company-grid">
+        <div class="company-card forthcoming">
+          <div class="company-name">PhosAgro</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">S1+2: 5.6 Mt · Revenue: ₽508 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">PIK Group</div>
+          <div class="company-meta"><span class="tag tag-private">Private</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">Emissions undisclosed · Revenue: ₽675 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">RusAgro</div>
+          <div class="company-meta"><span class="tag tag-public">Public</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">Emissions undisclosed · Revenue: ₽424 bn</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+        <div class="company-card forthcoming">
+          <div class="company-name">Cemros</div>
+          <div class="company-meta"><span class="tag tag-private">Private</span><span class="tag tag-forthcoming">Report forthcoming</span></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:2px">Emissions undisclosed · No revenue disclosed</div>
+          <div class="forthcoming-note">Climate Performance Overview in preparation</div>
+        </div>
+      </div>
+    </div>
+ 
+    </div><!-- /collapsible-body -->
   </section>
-
-  <!-- METHODS -->
-  <section class="section" id="methods">
-    <div class="section-header">
-      <span class="section-label">Capabilities</span>
-      <div class="section-rule"></div>
-    </div>
-    <h2 class="section-title">Methods &amp; tools</h2>
-    <div class="skills-grid">
-
-      <div class="skill-item">
-        <div class="skill-icon">
-          <svg viewBox="0 0 16 16"><rect x="2" y="8" width="3" height="6"/><rect x="6.5" y="4" width="3" height="10"/><rect x="11" y="1" width="3" height="13"/></svg>
-        </div>
-        <div class="skill-name">GHG accounting</div>
-        <div class="skill-desc">Scope 1–3 under GHG Protocol, PCAF financed emissions, SBTi alignment</div>
-      </div>
-
-      <div class="skill-item">
-        <div class="skill-icon">
-          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5"/><path d="M8 3v5l3 3"/></svg>
-        </div>
-        <div class="skill-name">Scenario analysis</div>
-        <div class="skill-desc">TCFD/TNFD-aligned, IEA NZE, NGFS, IPCC SSP pathway integration</div>
-      </div>
-
-      <div class="skill-item">
-        <div class="skill-icon">
-          <svg viewBox="0 0 16 16"><path d="M2 14l4-4 3 3 5-9"/></svg>
-        </div>
-        <div class="skill-name">Physical risk</div>
-        <div class="skill-desc">CMIP6-based hazard mapping, heat stress, flood, and water stress modelling</div>
-      </div>
-
-      <div class="skill-item">
-        <div class="skill-icon">
-          <svg viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="1"/><path d="M6 2v12M2 6h12"/></svg>
-        </div>
-        <div class="skill-name">ESG disclosure</div>
-        <div class="skill-desc">CSRD / ESRS, ISSB / IFRS S2, GRI, CDP, BRSR framework support</div>
-      </div>
-
-      <div class="skill-item">
-        <div class="skill-icon">
-          <svg viewBox="0 0 16 16"><circle cx="5" cy="5" r="2"/><circle cx="11" cy="11" r="2"/><path d="M7 5h2M7 11H5M5 7v2"/></svg>
-        </div>
-        <div class="skill-name">Data &amp; modelling</div>
-        <div class="skill-desc">Python, R, SQL — open climate datasets and satellite data pipelines</div>
-      </div>
-
-      <div class="skill-item">
-        <div class="skill-icon">
-          <svg viewBox="0 0 16 16"><path d="M8 2l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4z"/></svg>
-        </div>
-        <div class="skill-name">Strategy &amp; reporting</div>
-        <div class="skill-desc">Sustainability strategy, board reporting, investor-grade narrative</div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="contact-band" id="contact">
-    <div>
-      <h2 class="contact-title">Let's work on something <em>that matters.</em></h2>
-      <p class="contact-sub">Open to project engagements, research collaborations, and advisory roles in corporate climate strategy.</p>
-    </div>
-    <div class="contact-links">
-      <a class="contact-link" href="mailto:hello@climetrics.io">hello@climetrics.io</a>
-      <a class="contact-link" href="https://linkedin.com" target="_blank">LinkedIn →</a>
-      <a class="contact-link" href="#">Download CV →</a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <span class="footer-copy">© 2026 Climetrics. All rights reserved.</span>
-    <a class="footer-back" href="#">Back to top ↑</a>
-  </footer>
-
+ 
+</main>
+ 
+<footer>
+  <strong>Data sources:</strong> Company sustainability reports · CDP disclosures · PitchBook · GlobalData · OECD/IEA · Worldometer GHG data · World Economics.
+  Emissions in metric tons CO₂e. Revenue in Russian Ruble (RUB). Where data is unavailable or estimated, this is noted in individual company entries. 
+  Scope 2 figures use market-based methodology where available, otherwise location-based or undisclosed. Aggregate totals cover only companies with disclosed figures.
+</footer>
+ 
+<script>
+// ── Collapsible sections ──────────────────────────
+let chartsRendered = false;
+ 
+function setupCollapsible(headerId, bodyId, onOpen) {
+  const header = document.getElementById(headerId);
+  const body   = document.getElementById(bodyId);
+  const label  = header.querySelector('.toggle-label');
+ 
+  header.addEventListener('click', () => {
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    header.classList.toggle('open', !isOpen);
+    label.textContent = isOpen ? 'Show' : 'Hide';
+    if (!isOpen && onOpen) onOpen();
+  });
+}
+ 
+// Charts section — closed by default, render charts on first open
+setupCollapsible('chartsToggle', 'chartsBody', () => {
+  if (!chartsRendered) { renderCharts(); chartsRendered = true; }
+});
+ 
+// Companies section — open by default
+setupCollapsible('companiesToggle', 'companiesBody', null);
+// Sync initial label
+document.querySelector('#companiesToggle .toggle-label').textContent = 'Hide';
+document.getElementById('companiesToggle').classList.add('open');
+ 
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = '#888';
+ 
+// Sector-level data (computed from sheets)
+// ── Chart data & rendering (lazy — called on first expand) ──
+const sectorEmissions = {
+  'Oil & Gas':      233640 + 39844 + 9750 + 80100 + 13350,
+  'Metals & Mining': 31471 + 23920 + 27306 + 8600 + 2117,
+  'Utilities':       78135 + 266,
+  'Passenger Transport': 35600 + 11283,
+  'Telecom':         85217 + 1569,
+  'Food Retail':     3461 + 5460,
+  'IT':              301 + 36,
+  'Chemicals':       5626,
+};
+ 
+const sectorRevenue = {
+  'Oil & Gas':        10715 + 3047 + 1546 + 10139 + 2030 + 923,
+  'Metals & Mining':  738 + 830 + 1122 + 1163 + 7,
+  'Utilities':        1548 + 1506 + 89,
+  'Passenger Transport': 3296 + 857,
+  'Telecom':          704 + 708 + 486,
+  'Food Retail':      3908 + 3043,
+  'IT':               798 + 148,
+  'Chemicals':        508,
+};
+ 
+const sectorColors = [
+  '#c0392b', '#2563eb', '#0f766e',
+  '#d97706', '#7c3aed', '#16a34a',
+  '#0891b2', '#b45309'
+];
+ 
+const labels = Object.keys(sectorEmissions);
+ 
+function renderCharts() {
+  new Chart(document.getElementById('emissionsChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: labels.map(l => Math.round(sectorEmissions[l])),
+        backgroundColor: sectorColors,
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` ${c.parsed.x.toLocaleString()} kt CO₂e` } }
+      },
+      scales: {
+        x: { grid: { color: '#ece9e3' }, ticks: { font: { size: 10 }, callback: v => v >= 1000 ? (v/1000).toFixed(0)+'M t' : v+'k t' } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+ 
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: labels.map(l => Math.round(sectorRevenue[l])),
+        backgroundColor: sectorColors,
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` ₽${c.parsed.x.toLocaleString()} bn` } }
+      },
+      scales: {
+        x: { grid: { color: '#ece9e3' }, ticks: { font: { size: 10 }, callback: v => '₽' + v.toLocaleString() + ' bn' } },
+        y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+</script>
 </body>
 </html>
