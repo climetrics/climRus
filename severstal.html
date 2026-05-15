@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Severstal — Climate Performance Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-muted: #888;
+    --bg: #f5f3ef;
+    --bg-card: #ffffff;
+    --rule: #d8d4cc;
+    --rule-light: #ece9e3;
+    --accent: #1d4ed8;      /* steel blue — Severstal brand */
+    --accent2: #1e40af;
+    --amber: #d97706;
+    --green: #2d6a4f;
+    --green-light: #d1ece0;
+    --pathway: #2563eb;
+    --pathway-light: #dbeafe;
+    --teal: #0f766e;
+    --teal-light: #ccfbf1;
+    --red: #c0392b;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg); color: var(--ink);
+    font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav { background: var(--ink); border-bottom: 3px solid var(--accent); padding: 0 32px; }
+  .nav-inner {
+    max-width: 980px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; height: 52px;
+  }
+  .nav-brand {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #ccc; text-decoration: none;
+  }
+  .nav-brand span { color: var(--accent); }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a {
+    font-size: 12px; color: #888; text-decoration: none;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a.active { color: #fff; }
+
+  /* HEADER */
+  header { background: var(--ink); padding: 48px 0 36px; }
+  .header-inner {
+    max-width: 980px; margin: 0 auto; padding: 0 32px;
+    display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 24px;
+  }
+  .company-label {
+    font-size: 11px; font-weight: 300; letter-spacing: 0.2em;
+    text-transform: uppercase; color: #aaa; margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: clamp(24px, 4vw, 36px); font-weight: 700;
+    line-height: 1.15; letter-spacing: -0.5px; color: #fff;
+  }
+  .header-meta { text-align: right; color: #888; font-size: 12px; line-height: 1.9; }
+  .header-meta strong { color: #ccc; }
+
+  .page-rule {
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent) 0%, #60a5fa 50%, var(--teal) 100%);
+  }
+
+  /* LAYOUT */
+  main { max-width: 980px; margin: 0 auto; padding: 48px 32px 80px; display: grid; gap: 36px; }
+
+  .section-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-muted);
+    margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--rule);
+  }
+
+  .card { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 4px; padding: 26px 30px; }
+
+  .badge {
+    display: inline-block; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px;
+  }
+  .badge-green      { background: var(--green-light); color: var(--green); }
+  .badge-warning    { background: #fef3c7; color: #92400e; }
+  .badge-valid      { background: var(--green-light); color: var(--green); }
+  .badge-neutral    { background: #f3f4f6; color: #4b5563; }
+  .badge-undisclosed{ background: #f3f4f6; color: #6b7280; }
+  .badge-blue       { background: var(--pathway-light); color: var(--pathway); }
+  .badge-teal       { background: var(--teal-light); color: var(--teal); }
+  .badge-intensity  { background: #ede9fe; color: #5b21b6; }
+
+  /* ── SECTION 1 ── */
+  .disclosure-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  @media (max-width: 640px) { .disclosure-grid { grid-template-columns: 1fr; } }
+  .disc-block { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 3px; padding: 20px 22px; }
+  .disc-block-title { font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 12px; }
+  .source-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .source-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #f3f4f6; border: 1px solid var(--rule);
+    border-radius: 3px; padding: 5px 10px; font-size: 12.5px; color: var(--ink-soft);
+  }
+  .source-pill .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .update-notice {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: #fffbeb; border: 1px solid #fde68a; border-radius: 3px; padding: 14px 16px;
+  }
+  .notice-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .notice-text { font-size: 13px; color: #78350f; line-height: 1.55; }
+  .notice-text strong { font-weight: 500; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); padding: 8px 12px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--rule-light); color: var(--ink-soft); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; color: var(--ink); }
+  td.lbl { font-weight: 500; color: var(--ink); }
+  tr.sub td { background: #fafaf9; font-weight: 500; color: var(--ink); }
+  tr.tot td { background: var(--ink); color: #fff; font-weight: 500; }
+  tr.tot td.num { color: #fff; }
+  .sbar { height: 6px; background: var(--rule-light); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+  .sbar-fill { height: 100%; border-radius: 3px; }
+
+  /* ── SECTION 2 ── */
+  .targets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 620px) { .targets-grid { grid-template-columns: 1fr; } }
+
+  .target-card {
+    border: 1px solid var(--rule); border-radius: 3px; padding: 20px 22px;
+    position: relative; overflow: hidden; background: var(--bg-card);
+  }
+  .target-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .target-card.near::before { background: var(--accent); }
+  .target-card.far::before  { background: var(--teal); }
+
+  .target-year { font-family: 'Libre Baskerville', serif; font-size: 34px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .target-card.near .target-year { color: var(--accent); }
+  .target-card.far  .target-year { color: var(--teal); }
+
+  .target-scope { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 10px; }
+  .target-headline { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .target-wording { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 12px; }
+  .target-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule); }
+  .stat-value { font-family: 'Libre Baskerville', serif; font-size: 15px; font-weight: 700; }
+  .stat-label { font-size: 11px; color: var(--ink-muted); }
+
+  .progress-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--rule); }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-soft); margin-bottom: 7px; }
+  .progress-track { height: 8px; background: var(--rule-light); border-radius: 4px; }
+  .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), #60a5fa); transition: width 1s ease; }
+  .progress-note { font-size: 11px; color: var(--ink-muted); margin-top: 6px; }
+  .scope3-note {
+    background: #fafafa; border: 1px solid var(--rule); border-left: 3px solid var(--ink-muted);
+    border-radius: 0 3px 3px 0; padding: 12px 16px; font-size: 13px; color: var(--ink-soft); margin-top: 16px; line-height: 1.55;
+  }
+  .intensity-note {
+    background: #f5f3ff; border: 1px solid #ddd6fe; border-left: 3px solid #7c3aed;
+    border-radius: 0 3px 3px 0; padding: 12px 16px; font-size: 13px; color: #4c1d95; margin-top: 14px; line-height: 1.55;
+  }
+
+  /* ── CHART SECTIONS ── */
+  .chart-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .chart-title { font-family: 'Libre Baskerville', serif; font-size: 16px; font-weight: 700; }
+  .chart-subtitle { font-size: 12px; color: var(--ink-muted); margin-top: 3px; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-soft); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .chart-wrap { position: relative; height: 280px; }
+  .pathway-note { font-size: 13px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 18px; max-width: 720px; }
+  .pathway-source { font-size: 11px; color: var(--ink-muted); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--rule); }
+  .pathway-source a { color: var(--pathway); text-decoration: none; }
+
+  /* ── SECTION 5: LOW CARBON ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 700px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+  .kpi-tile { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 3px; padding: 16px 18px; }
+  .kpi-tile-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
+  .kpi-tile-value { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--teal); line-height: 1.1; }
+  .kpi-tile-sub { font-size: 11px; color: var(--ink-muted); margin-top: 3px; }
+
+  .activities-label { font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 12px; }
+  .activities-list { display: grid; gap: 12px; }
+  .act-card {
+    border: 1px solid var(--rule); border-radius: 3px; padding: 16px 18px;
+    background: var(--bg-card); display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: start;
+  }
+  .act-card.latest { border-color: var(--teal); border-left-width: 3px; }
+  .act-year { font-family: 'Libre Baskerville', serif; font-size: 20px; font-weight: 700; color: var(--ink-muted); line-height: 1; }
+  .act-card.latest .act-year { color: var(--teal); }
+  .act-text { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .act-saving { text-align: right; white-space: nowrap; }
+  .act-saving-val { font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 500; color: var(--accent); }
+  .act-saving-lbl { font-size: 10px; color: var(--ink-muted); }
+
+  /* ── SECTION 6: GOVERNANCE ── */
+  .gov-box {
+    background: #f8faff; border: 1px solid #bfdbfe; border-left: 3px solid var(--accent);
+    border-radius: 0 3px 3px 0; padding: 16px 20px; font-size: 13.5px;
+    color: var(--ink-soft); line-height: 1.7;
+  }
+
+  footer {
+    max-width: 980px; margin: 0 auto; padding: 20px 32px 48px;
+    font-size: 11.5px; color: var(--ink-muted); border-top: 1px solid var(--rule); line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Russian <span>Climate</span> Landscape</a>
+    <div class="nav-links">
+      <a href="index.html">Overview</a>
+      <a href="lukoil.html">Lukoil</a>
+      <a href="severstal.html" class="active">Severstal</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="company-label">Corporate Climate Profile · Metals &amp; Mining</div>
+      <h1>Severstal<br>Climate Performance Overview</h1>
+    </div>
+    <div class="header-meta">
+      <strong>Data as of 2024</strong><br>
+      Scope 1, 2 &amp; 3<br>
+      metric tons CO₂e
+    </div>
+  </div>
+</header>
+<div class="page-rule"></div>
+
+<main>
+
+  <!-- 01 DISCLOSURE -->
+  <section>
+    <div class="section-label">01 — Disclosure &amp; Emissions Profile</div>
+
+    <div class="disclosure-grid">
+      <div class="disc-block">
+        <div class="disc-block-title">Main Reporting Sources</div>
+        <div class="source-pills">
+          <span class="source-pill"><span class="dot" style="background:var(--accent)"></span>Sustainability Report</span>
+          <span class="source-pill"><span class="dot" style="background:var(--amber)"></span>Integrated Report</span>
+        </div>
+      </div>
+      <div class="disc-block">
+        <div class="disc-block-title">Current Disclosure Note</div>
+        <div class="update-notice">
+          <div class="notice-icon">⏳</div>
+          <div class="notice-text">
+            Severstal has yet to publish its <strong>2025 Integrated Report</strong>, expected in <strong>Q3 2026</strong>. The last dedicated climate report dates from 2022; relevant climate data continues to be published via the annual integrated report.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;margin-bottom:4px">Emissions Profile — 2024 Reported</div>
+      <div style="font-size:12px;color:var(--ink-muted);margin-bottom:18px">GHG Protocol · metric tons CO₂e · external limited assurance on Scope 1, 2 &amp; Scope 3</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th style="text-align:right">Tons CO₂e</th>
+              <th style="text-align:right">Share of total</th>
+              <th style="min-width:90px"></th>
+              <th>Verification</th>
+              <th>Framework</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="lbl">Scope 1</td>
+              <td class="num">23,030,000</td>
+              <td class="num" style="font-size:11px;color:var(--ink-muted)">63.4%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:63.4%;background:var(--accent)"></div></div></td>
+              <td><span class="badge badge-green">Ext. limited assurance</span></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr>
+              <td class="lbl">Scope 2</td>
+              <td class="num">890,000</td>
+              <td class="num" style="font-size:11px;color:var(--ink-muted)">2.5%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:2.5%;background:var(--accent)"></div></div></td>
+              <td><span class="badge badge-green">Ext. limited assurance</span></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr class="sub">
+              <td class="lbl">Scope 1+2</td>
+              <td class="num">23,920,000</td>
+              <td class="num" style="font-size:11px">65.8%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:65.8%;background:var(--accent)"></div></div></td>
+              <td></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr>
+              <td class="lbl" style="font-size:12.5px;color:var(--ink-soft);padding-left:20px">↳ Capital goods</td>
+              <td class="num" style="color:var(--ink-soft)">410,000</td>
+              <td class="num" style="font-size:11px;color:var(--ink-muted)">1.1%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:1.1%;background:#6b7280"></div></div></td>
+              <td><span class="badge badge-green">Ext. limited assurance</span></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr>
+              <td class="lbl" style="font-size:12.5px;color:var(--ink-soft);padding-left:20px">↳ Purchased goods &amp; services</td>
+              <td class="num" style="color:var(--ink-soft)">7,390,000</td>
+              <td class="num" style="font-size:11px;color:var(--ink-muted)">20.3%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:20.3%;background:#6b7280;opacity:0.7"></div></div></td>
+              <td><span class="badge badge-green">Ext. limited assurance</span></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr>
+              <td class="lbl" style="font-size:12.5px;color:var(--ink-soft);padding-left:20px">↳ Upstream transport &amp; distribution</td>
+              <td class="num" style="color:var(--ink-soft)">390,000</td>
+              <td class="num" style="font-size:11px;color:var(--ink-muted)">1.1%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:1.1%;background:#6b7280;opacity:0.7"></div></div></td>
+              <td><span class="badge badge-green">Ext. limited assurance</span></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr>
+              <td class="lbl" style="font-size:12.5px;color:var(--ink-soft);padding-left:20px">↳ Fuel &amp; energy (not in S1+2)</td>
+              <td class="num" style="color:var(--ink-soft)">1,670,000</td>
+              <td class="num" style="font-size:11px;color:var(--ink-muted)">4.6%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:4.6%;background:#6b7280;opacity:0.7"></div></div></td>
+              <td><span class="badge badge-green">Ext. limited assurance</span></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr>
+              <td class="lbl" style="font-size:12.5px;color:var(--ink-soft);padding-left:20px">↳ Processing of sold products</td>
+              <td class="num" style="color:var(--ink-soft)">2,550,000</td>
+              <td class="num" style="font-size:11px;color:var(--ink-muted)">7.0%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:7%;background:#6b7280;opacity:0.7"></div></div></td>
+              <td><span class="badge badge-green">Ext. limited assurance</span></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr class="sub">
+              <td class="lbl">Scope 3</td>
+              <td class="num">12,410,000</td>
+              <td class="num" style="font-size:11px">34.2%</td>
+              <td><div class="sbar"><div class="sbar-fill" style="width:34.2%;background:#6b7280"></div></div></td>
+              <td><span class="badge badge-green">Ext. limited assurance</span></td>
+              <td style="font-size:12px;color:var(--ink-muted)">GHG Protocol</td>
+            </tr>
+            <tr class="tot">
+              <td class="lbl">Total Scope 1+2+3</td>
+              <td class="num">36,330,000</td>
+              <td class="num">100%</td>
+              <td></td><td></td>
+              <td style="font-size:12px;color:#aaa">GHG Protocol</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:11.5px;color:var(--ink-muted);margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-light)">
+        Unlike oil &amp; gas majors, Severstal's footprint is dominated by <strong>Scope 1 direct emissions</strong> (63.4%), primarily from blast furnace steelmaking. Scope 3 is driven by <strong>purchased goods &amp; services</strong> (20.3%). The use-of-sold-products category is not material for a steel producer.
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 TARGETS -->
+  <section>
+    <div class="section-label">02 — Climate Targets</div>
+    <div class="targets-grid">
+
+      <div class="target-card near">
+        <div class="target-year">2030</div>
+        <div class="target-scope">Scope 1+2 · Intensity</div>
+        <div class="target-headline">−10% CO₂ intensity vs. 2020</div>
+        <div class="target-wording">
+          Severstal's Decarbonisation Strategy sets a voluntary obligation to reduce the CO₂ intensity of steel production by 10% by 2030 against the 2020 baseline, with an interim −3% short-term goal in 2024.
+        </div>
+        <div>
+          <span class="badge badge-warning">Not SBTi validated</span>&nbsp;
+          <span class="badge badge-intensity">Intensity target</span>&nbsp;
+          <span class="badge badge-valid">Scorable</span>
+        </div>
+        <div class="target-stats">
+          <div><div class="stat-value">24.2 Mt</div><div class="stat-label">Base year (2020)</div></div>
+          <div><div class="stat-value">21.8 Mt</div><div class="stat-label">Target emissions (−10%)</div></div>
+        </div>
+        <div class="progress-section">
+          <div class="progress-label">
+            <span>Progress to 2030 target</span>
+            <span id="prog-pct">—</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+          </div>
+          <div class="progress-note">2024 reported: 23.9 Mt · Target: 21.8 Mt · Gap remaining: ~2.1 Mt</div>
+        </div>
+        <div class="intensity-note">
+          <strong>Note on target type:</strong> This is an <em>intensity</em> target (CO₂ per tonne of crude steel), not an absolute reduction. Absolute emissions could rise if production volume increases, even if the target is met.
+        </div>
+      </div>
+
+      <div class="target-card far">
+        <div class="target-year">—</div>
+        <div class="target-scope">Scope 3 · Undisclosed</div>
+        <div class="target-headline">No net-zero commitment</div>
+        <div class="target-wording">
+          Severstal has not publicly committed to a net-zero or long-term absolute reduction target beyond 2030. No Scope 3 quantified targets have been disclosed.
+        </div>
+        <div>
+          <span class="badge badge-warning">Not SBTi validated</span>&nbsp;
+          <span class="badge badge-undisclosed">No long-term target</span>
+        </div>
+        <div class="scope3-note">
+          <strong>Scope 3:</strong> Two Scope 3 entries are recorded but carry no reduction percentage, base year, or target year. The Decarbonisation Strategy 2030 approved by the Board in 2023 does not address Scope 3 reduction pathways.
+        </div>
+        <div class="scope3-note" style="margin-top:10px;border-left-color:var(--accent)">
+          <strong>Production mix:</strong> The Cherepovets steel plant operates with ~20% electric arc furnace (EAF) capacity and ~80% basic oxygen furnace (BOF). Transitioning toward EAF would significantly reduce Scope 1 emissions but is not part of current disclosed plans.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 TREND -->
+  <section>
+    <div class="section-label">03 — Reported Emissions Trend (2019–2024)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+      <div class="card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Scope 1+2</div>
+            <div class="chart-subtitle">Mt CO₂e · direct &amp; energy indirect</div>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Reported</div>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:230px"><canvas id="s12Chart"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Scope 3</div>
+            <div class="chart-subtitle">Mt CO₂e · value chain emissions</div>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#6b7280"></div>Reported</div>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:230px"><canvas id="s3Chart"></canvas></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 PATHWAY -->
+  <section>
+    <div class="section-label">04 — Pathway Gap Analysis</div>
+    <div class="card">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Reported S1+2 vs. 1.5°C Steel Pathway</div>
+          <div class="chart-subtitle">Shaded area = cumulative carbon debt (gap above pathway)</div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Reported S1+2</div>
+          <div class="legend-item">
+            <svg width="22" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="22" y2="5" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,3"/></svg>
+            1.5°C Steel Pathway
+          </div>
+          <div class="legend-item">
+            <svg width="22" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="22" y2="5" stroke="#d97706" stroke-width="2" stroke-dasharray="3,3"/></svg>
+            Severstal 2030 Target
+          </div>
+        </div>
+      </div>
+      <p class="pathway-note">
+        The 1.5°C pathway for steel producers (Heavy Industries / ARC benchmark) requires approximately <strong>50% reduction in S1+2 by 2030</strong> vs. 2019, implying a 2030 budget of ~<strong>14.1 Mt</strong>. Severstal's own intensity-based target implies 2030 absolute emissions of ~<strong>21.8 Mt</strong> — more than <strong>50% above the science-based level</strong>. The amber line shows the trajectory implied by the corporate target; the shaded area is the gap.
+      </p>
+      <div class="chart-wrap"><canvas id="pathwayChart"></canvas></div>
+      <div class="pathway-source">
+        Steel pathway source: Gonzalez Hernandez et al. (2022) — <em>Decarbonisation pathways for the steel industry</em>, Springer Nature Applied Sciences. &nbsp;
+        <a href="https://link.springer.com/article/10.1007/s42452-022-05004-0" target="_blank">View paper ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 LOW CARBON -->
+  <section>
+    <div class="section-label">05 — Low Carbon Investments &amp; Technologies</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">Total CapEx 2024</div>
+        <div class="kpi-tile-value" style="color:var(--accent)">₽118.5 bn</div>
+        <div class="kpi-tile-sub">Total capital expenditure</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">Electricity consumption 2024</div>
+        <div class="kpi-tile-value">30,136 TJ</div>
+        <div class="kpi-tile-sub">Down from 31,951 TJ in 2020</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">Renewable &amp; carbon-free share</div>
+        <div class="kpi-tile-value">43.9%</div>
+        <div class="kpi-tile-sub">Of electricity consumed in 2024</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-tile-label">EAF capacity share</div>
+        <div class="kpi-tile-value">~20%</div>
+        <div class="kpi-tile-sub">Cherepovets plant · 2,400 of 12,201 t capacity</div>
+      </div>
+    </div>
+
+    <!-- Electricity trend table -->
+    <div class="card" style="margin-bottom:20px">
+      <div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;margin-bottom:4px">Electricity &amp; Renewables Trend (2020–2024)</div>
+      <div style="font-size:12px;color:var(--ink-muted);margin-bottom:18px">TJ · share of renewable &amp; carbon-free sources in electricity consumption</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th style="text-align:right">Total electricity (TJ)</th>
+              <th style="text-align:right">Renewables &amp; carbon-free %</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="lbl" style="color:var(--ink-muted);font-weight:400">2020</td><td class="num" style="color:var(--ink-muted)">31,951</td><td class="num" style="color:var(--ink-muted)">47.8%</td></tr>
+            <tr><td class="lbl" style="color:var(--ink-muted);font-weight:400">2021</td><td class="num" style="color:var(--ink-muted)">34,131</td><td class="num" style="color:var(--ink-muted)">45.7%</td></tr>
+            <tr><td class="lbl" style="color:var(--ink-muted);font-weight:400">2022</td><td class="num" style="color:var(--ink-muted)">31,194</td><td class="num" style="color:var(--ink-muted)">44.9%</td></tr>
+            <tr><td class="lbl" style="color:var(--ink-muted);font-weight:400">2023</td><td class="num" style="color:var(--ink-muted)">31,132</td><td class="num" style="color:var(--ink-muted)">44.1%</td></tr>
+            <tr class="sub"><td class="lbl">2024</td><td class="num">30,136</td><td class="num">43.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Decarbonisation actions -->
+    <div class="activities-label">Documented Decarbonisation Actions (2020–2024)</div>
+    <div class="activities-list">
+
+      <div class="act-card">
+        <div class="act-year">2020</div>
+        <div class="act-text">
+          <strong>In-house electricity generation programme</strong> — upgrade of steam turbines and construction of boiler plant with boiler unit No. 11, targeting 95% of electricity from in-house generation. Expected to reduce natural gas combustion (Scope 1) and third-party electricity purchases (Scope 2). Total expected emissions reduction over ten years: <em>1.8 Mt CO₂e</em>.
+          <div style="margin-top:8px"><span class="badge badge-teal">Implemented</span></div>
+        </div>
+        <div class="act-saving">
+          <div class="act-saving-val">150 kt</div>
+          <div class="act-saving-lbl">CO₂e/yr saved</div>
+        </div>
+      </div>
+
+      <div class="act-card">
+        <div class="act-year">2021</div>
+        <div class="act-text">
+          <strong>Rolling production upgrade</strong> — replacement of reheating furnaces Nos. 1 and 2, improving energy efficiency in the rolling mill and reducing direct fuel combustion emissions.
+          <div style="margin-top:8px"><span class="badge badge-teal">Implemented</span></div>
+        </div>
+        <div class="act-saving">
+          <div class="act-saving-val">180 kt</div>
+          <div class="act-saving-lbl">CO₂e/yr saved</div>
+        </div>
+      </div>
+
+      <div class="act-card">
+        <div class="act-year">2022</div>
+        <div class="act-text">
+          <strong>Retrofitting of solid fuel preparation unit</strong> — improvements to the solid fuel handling and preparation process at the Cherepovets integrated steel plant, reducing associated process emissions.
+          <div style="margin-top:8px"><span class="badge badge-teal">Implemented</span></div>
+        </div>
+        <div class="act-saving">
+          <div class="act-saving-val">100 kt</div>
+          <div class="act-saving-lbl">CO₂e/yr saved</div>
+        </div>
+      </div>
+
+      <div class="act-card">
+        <div class="act-year">2023</div>
+        <div class="act-text">
+          <strong>Blast Furnace Expert System</strong> — deployment of an AI-assisted expert system to optimise blast furnace operations, improving process stability and reducing coke and energy consumption.
+          <div style="margin-top:8px"><span class="badge badge-teal">Implemented</span></div>
+        </div>
+        <div class="act-saving">
+          <div class="act-saving-val">50 kt</div>
+          <div class="act-saving-lbl">CO₂e/yr saved</div>
+        </div>
+      </div>
+
+      <div class="act-card latest">
+        <div class="act-year">2024</div>
+        <div class="act-text">
+          <strong>Overhaul of blast furnace No. 5</strong> — major capital overhaul of the primary ironmaking unit at Cherepovets, delivering significant improvements in fuel efficiency and process emissions intensity. Largest single-measure reduction in the 2020–2024 programme.
+          <div style="margin-top:8px"><span class="badge badge-teal">Implemented</span></div>
+        </div>
+        <div class="act-saving">
+          <div class="act-saving-val">600 kt</div>
+          <div class="act-saving-lbl">CO₂e/yr saved</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 06 GOVERNANCE -->
+  <section>
+    <div class="section-label">06 — Climate Governance</div>
+    <div class="card">
+      <div style="font-family:'Libre Baskerville',serif;font-size:16px;font-weight:700;margin-bottom:16px">Reported Governance Structure</div>
+      <div class="gov-box">
+        Severstal follows its <strong>Decarbonisation Strategy 2030</strong>, approved by the Board of Directors in 2023. In the same reporting year the company elaborated and approved the <strong>Conserve Biodiversity – Preserve Life Strategy</strong>, broadening its environmental governance framework beyond climate. Board-level oversight of the decarbonisation strategy is in place, though details of executive-level climate accountability and remuneration linkage are not publicly disclosed.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>Data sources:</strong> Severstal Sustainability Report · Severstal Integrated Report · Gonzalez Hernandez et al. (2022) — Decarbonisation pathways for the steel industry (Springer Nature) · UNEP FI Sectoral Pathways (UTS, 2022) · Global Energy Monitor — Severstal Cherepovets.
+  All emissions in metric tons CO₂e. Pathway projections indexed to 2019 reported Scope 1+2 base using the Heavy Industries / ARC benchmark reduction factors.
+  SBTi = Science Based Targets initiative. EAF = Electric Arc Furnace. BOF = Basic Oxygen Furnace. This overview is for informational purposes only.
+</footer>
+
+<script>
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = '#888';
+
+const years = [2019, 2020, 2021, 2022, 2023, 2024];
+const s12   = [28110000, 27860000, 30270000, 27080000, 25780000, 23920000];
+const s3    = [15450000, 16100000, 14080000, 12470000, 13170000, 13490000];
+
+// Progress bar
+const base2020 = 24185400, target2030 = 21766860, latest2024 = 23920000;
+const pct = Math.min(100, Math.max(0, ((base2020 - latest2024) / (base2020 - target2030)) * 100));
+document.getElementById('prog-pct').textContent = pct.toFixed(0) + '% of target reduction achieved';
+setTimeout(() => { document.getElementById('prog-fill').style.width = pct.toFixed(1) + '%'; }, 300);
+
+// Shared options factory
+function trendOpts(color) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.parsed.y.toFixed(1)} Mt CO₂e` } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: { title: { display: true, text: 'Mt CO₂e', font: { size: 11 } }, grid: { color: '#ece9e3' }, ticks: { font: { size: 11 }, callback: v => v + ' Mt' } }
+    }
+  };
+}
+
+// S1+2 chart
+const g1 = document.getElementById('s12Chart').getContext('2d').createLinearGradient(0,0,0,220);
+g1.addColorStop(0, 'rgba(29,78,216,0.18)'); g1.addColorStop(1, 'rgba(29,78,216,0.02)');
+new Chart(document.getElementById('s12Chart'), {
+  type: 'line',
+  data: { labels: years, datasets: [{ label: 'S1+2', data: s12.map(v=>v/1e6), borderColor: '#1d4ed8', backgroundColor: g1, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#1d4ed8', tension: 0.3, fill: true }] },
+  options: { ...trendOpts('#1d4ed8'), scales: { ...trendOpts().scales, x: { grid:{display:false}, ticks:{font:{size:11}} }, y: { ...trendOpts().scales?.y, min:20, max:35, title:{display:true,text:'Mt CO₂e',font:{size:11}}, grid:{color:'#ece9e3'}, ticks:{font:{size:11},callback:v=>v+' Mt'} } } }
+});
+
+// S3 chart
+const g3 = document.getElementById('s3Chart').getContext('2d').createLinearGradient(0,0,0,220);
+g3.addColorStop(0, 'rgba(107,114,128,0.18)'); g3.addColorStop(1, 'rgba(107,114,128,0.02)');
+new Chart(document.getElementById('s3Chart'), {
+  type: 'line',
+  data: { labels: years, datasets: [{ label: 'S3', data: s3.map(v=>v/1e6), borderColor: '#6b7280', backgroundColor: g3, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#6b7280', tension: 0.3, fill: true }] },
+  options: { ...trendOpts('#6b7280'), scales: { ...trendOpts().scales, x: { grid:{display:false}, ticks:{font:{size:11}} }, y: { ...trendOpts().scales?.y, min:10, max:20, title:{display:true,text:'Mt CO₂e',font:{size:11}}, grid:{color:'#ece9e3'}, ticks:{font:{size:11},callback:v=>v+' Mt'} } } }
+});
+
+// Pathway chart
+const allYears = [2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030];
+const pathwayFactors = [1,0.9601,0.9201,0.8802,0.8402,0.8003,0.7603,0.7084,0.6564,0.6045,0.5525,0.5006];
+const base2019 = 28110000;
+const pathway = pathwayFactors.map(f => +(base2019*f/1e6).toFixed(2));
+
+const reportedExt = [...s12.map(v=>v/1e6), null, null, null, null, null, null];
+
+// Target line: straight from 2019 actual to 2030 target (21.77 Mt)
+const targetStart = base2019/1e6, targetEnd = 21766860/1e6;
+const targetLine = allYears.map((yr,i) => +(targetStart + (i/(allYears.length-1))*(targetEnd-targetStart)).toFixed(2));
+
+const ctx = document.getElementById('pathwayChart').getContext('2d');
+const grad = ctx.createLinearGradient(0,0,0,280);
+grad.addColorStop(0,'rgba(29,78,216,0.20)'); grad.addColorStop(1,'rgba(29,78,216,0.03)');
+
+// Gap annotation plugin
+const gapPlugin = {
+  id: 'gapAnnotation',
+  afterDraw(chart) {
+    const { ctx: c, scales: { x, y } } = chart;
+    const x2030 = x.getPixelForValue('2030');
+    const yTarget = y.getPixelForValue(targetEnd);
+    const yPathway = y.getPixelForValue(pathway[pathway.length-1]);
+    c.save();
+    c.setLineDash([3,3]); c.strokeStyle='rgba(0,0,0,0.18)'; c.lineWidth=1;
+    c.beginPath(); c.moveTo(x2030,yTarget); c.lineTo(x2030+48,yTarget); c.stroke();
+    c.beginPath(); c.moveTo(x2030,yPathway); c.lineTo(x2030+48,yPathway); c.stroke();
+    c.setLineDash([]);
+    const bx=x2030+46;
+    c.strokeStyle='rgba(0,0,0,0.3)'; c.lineWidth=1.5;
+    c.beginPath(); c.moveTo(bx,yTarget); c.lineTo(bx+6,yTarget); c.lineTo(bx+6,yPathway); c.lineTo(bx,yPathway); c.stroke();
+    const midY=(yTarget+yPathway)/2;
+    c.fillStyle='#1a1a1a'; c.font='600 11px DM Sans,sans-serif'; c.textAlign='left';
+    c.fillText('Gap:', bx+12, midY-7);
+    c.fillStyle='#1d4ed8'; c.font='700 11.5px DM Sans,sans-serif';
+    c.fillText(`+${(targetEnd-pathway[pathway.length-1]).toFixed(1)} Mt`, bx+12, midY+7);
+    c.restore();
+  }
+};
+
+new Chart(ctx, {
+  type: 'line',
+  plugins: [gapPlugin],
+  data: {
+    labels: allYears,
+    datasets: [
+      { label:'Reported S1+2', data:reportedExt, borderColor:'#1d4ed8', backgroundColor:grad, borderWidth:2.5, pointRadius: ctx=>ctx.dataIndex<6?4:0, pointBackgroundColor:'#1d4ed8', tension:0.3, fill:'+1', spanGaps:false },
+      { label:'1.5°C Steel Pathway', data:pathway, borderColor:'#2563eb', backgroundColor:'transparent', borderWidth:2, borderDash:[6,4], pointRadius:0, tension:0.3, fill:false },
+      { label:'Severstal 2030 Target', data:targetLine, borderColor:'#d97706', backgroundColor:'transparent', borderWidth:2, borderDash:[3,3], pointRadius: ctx=>ctx.dataIndex===11?5:0, pointBackgroundColor:'#d97706', tension:0, fill:false }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    layout:{ padding:{ right:90 } },
+    interaction:{ mode:'index', intersect:false },
+    plugins:{ legend:{ display:false }, tooltip:{ filter:item=>item.raw!==null, callbacks:{ label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(1)} Mt` } } },
+    scales:{
+      x:{ grid:{display:false}, ticks:{font:{size:11}} },
+      y:{ title:{display:true,text:'Mt CO₂e',font:{size:11}}, grid:{color:'#ece9e3'}, ticks:{font:{size:11},callback:v=>v+' Mt'}, min:10, max:35 }
+    }
+  }
+});
+</script>
+</body>
+</html>
