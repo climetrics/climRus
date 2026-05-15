@@ -443,6 +443,10 @@
           </div>
           <div class="legend">
             <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Reported</div>
+            <div class="legend-item">
+              <svg width="18" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="18" y2="5" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,3"/></svg>
+              1.5°C Pathway
+            </div>
           </div>
         </div>
         <div class="chart-wrap" style="height:230px"><canvas id="s12Chart"></canvas></div>
@@ -456,6 +460,10 @@
           </div>
           <div class="legend">
             <div class="legend-item"><div class="legend-dot" style="background:#6b7280"></div>Reported</div>
+            <div class="legend-item">
+              <svg width="18" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="18" y2="5" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,3"/></svg>
+              1.5°C Pathway
+            </div>
           </div>
         </div>
         <div class="chart-wrap" style="height:230px"><canvas id="s3Chart"></canvas></div>
@@ -660,13 +668,31 @@ function trendOpts(color) {
   };
 }
 
+// S1+2 pathway (Heavy Industries / ARC benchmark, indexed to 2019)
+const s12PathwayFactors = [1, 0.9601, 0.9201, 0.8802, 0.8402, 0.8003];
+const s12Pathway = s12PathwayFactors.map(f => +(s12[0] * f / 1e6).toFixed(2));
+
+// S3 pathway (UNEP FI cross-sectoral, indexed to 2019)
+const s3PathwayFactors = [1, 0.9569, 0.9139, 0.8708, 0.8278, 0.7847];
+const s3Pathway = s3PathwayFactors.map(f => +(s3[0] * f / 1e6).toFixed(2));
+
 // S1+2 chart
 const g1 = document.getElementById('s12Chart').getContext('2d').createLinearGradient(0,0,0,220);
 g1.addColorStop(0, 'rgba(29,78,216,0.18)'); g1.addColorStop(1, 'rgba(29,78,216,0.02)');
 new Chart(document.getElementById('s12Chart'), {
   type: 'line',
-  data: { labels: years, datasets: [{ label: 'S1+2', data: s12.map(v=>v/1e6), borderColor: '#1d4ed8', backgroundColor: g1, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#1d4ed8', tension: 0.3, fill: true }] },
-  options: { ...trendOpts('#1d4ed8'), scales: { ...trendOpts().scales, x: { grid:{display:false}, ticks:{font:{size:11}} }, y: { ...trendOpts().scales?.y, min:20, max:35, title:{display:true,text:'Mt CO₂e',font:{size:11}}, grid:{color:'#ece9e3'}, ticks:{font:{size:11},callback:v=>v+' Mt'} } } }
+  data: { labels: years, datasets: [
+    { label: 'Reported S1+2', data: s12.map(v=>v/1e6), borderColor: '#1d4ed8', backgroundColor: g1, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#1d4ed8', tension: 0.3, fill: true },
+    { label: '1.5°C Pathway', data: s12Pathway, borderColor: '#2563eb', backgroundColor: 'transparent', borderWidth: 2, borderDash: [5,3], pointRadius: 0, tension: 0.3, fill: false }
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(1)} Mt` } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: { min: 20, max: 35, title: { display: true, text: 'Mt CO₂e', font: { size: 11 } }, grid: { color: '#ece9e3' }, ticks: { font: { size: 11 }, callback: v => v + ' Mt' } }
+    }
+  }
 });
 
 // S3 chart
@@ -674,8 +700,18 @@ const g3 = document.getElementById('s3Chart').getContext('2d').createLinearGradi
 g3.addColorStop(0, 'rgba(107,114,128,0.18)'); g3.addColorStop(1, 'rgba(107,114,128,0.02)');
 new Chart(document.getElementById('s3Chart'), {
   type: 'line',
-  data: { labels: years, datasets: [{ label: 'S3', data: s3.map(v=>v/1e6), borderColor: '#6b7280', backgroundColor: g3, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#6b7280', tension: 0.3, fill: true }] },
-  options: { ...trendOpts('#6b7280'), scales: { ...trendOpts().scales, x: { grid:{display:false}, ticks:{font:{size:11}} }, y: { ...trendOpts().scales?.y, min:10, max:20, title:{display:true,text:'Mt CO₂e',font:{size:11}}, grid:{color:'#ece9e3'}, ticks:{font:{size:11},callback:v=>v+' Mt'} } } }
+  data: { labels: years, datasets: [
+    { label: 'Reported S3', data: s3.map(v=>v/1e6), borderColor: '#6b7280', backgroundColor: g3, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: '#6b7280', tension: 0.3, fill: true },
+    { label: '1.5°C Pathway', data: s3Pathway, borderColor: '#2563eb', backgroundColor: 'transparent', borderWidth: 2, borderDash: [5,3], pointRadius: 0, tension: 0.3, fill: false }
+  ]},
+  options: { responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(1)} Mt` } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: { min: 10, max: 20, title: { display: true, text: 'Mt CO₂e', font: { size: 11 } }, grid: { color: '#ece9e3' }, ticks: { font: { size: 11 }, callback: v => v + ' Mt' } }
+    }
+  }
 });
 
 // Pathway chart
